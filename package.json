@@ -1,0 +1,9 @@
+{
+  "name": "airport-city-neelambur",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.js -i src/input.css -o assets/css/app.css --minify",
+    "watch": "tailwindcss -c tailwind.config.js -i src/input.css -o assets/css/app.css --watch"
+  },
+  "devDependencies": { "tailwindcss": "^3.4.17" }
+}

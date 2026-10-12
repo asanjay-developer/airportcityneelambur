@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Self-hosted fonts (latin subset) */
+@font-face{font-family:"Bodoni Moda";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/bodoni-moda-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Bodoni Moda";font-style:italic;font-weight:400;font-display:swap;src:url(../fonts/bodoni-moda-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Bodoni Moda";font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/bodoni-moda-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Bodoni Moda";font-style:italic;font-weight:500;font-display:swap;src:url(../fonts/bodoni-moda-latin-500-italic.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:300;font-display:swap;src:url(../fonts/dm-sans-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/dm-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/dm-sans-latin-500-normal.woff2) format("woff2")}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body { font-weight: 300; text-rendering: optimizeLegibility; }
+  :focus-visible { outline: 1px solid #A5573C; outline-offset: 4px; }
+  img { @apply block; color: transparent; }
+  dialog:not([open]) { display: none; }
+}
+
+@layer components {
+  .eyebrow { @apply flex items-center gap-4 text-[.7rem] font-normal uppercase tracking-[.34em] text-copper; }
+  .eyebrow::before { content: ""; @apply block h-px w-10 bg-copper; }
+
+  /* Masked line reveal (descender-safe) */
+  .mask { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
+  .mask-in { display: block; will-change: transform; }
+
+  /* Hairline-underline link */
+  .link-line { position: relative; display: inline-block; padding-bottom: 6px; }
+  .link-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; opacity: .5; transform-origin: right; transition: transform .6s cubic-bezier(.65,0,.35,1), opacity .6s; }
+  .link-line:hover::after { transform: scaleX(.35); transform-origin: left; opacity: 1; }
+
+  /* Form fields: underline style */
+  .field label { @apply block text-[.66rem] uppercase tracking-[.26em] text-ink/60; }
+  .field input, .field select, .field textarea { @apply mt-2 block w-full rounded-none border-0 border-b border-ink/30 bg-transparent px-0 py-2 font-display text-xl font-light text-ink outline-none transition-colors focus:border-copper focus:ring-0; }
+  .field textarea { resize: vertical; }
+  .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: none; box-shadow: 0 1px 0 0 #A5573C; }
+  .field input:user-invalid { @apply border-red-800/60; }
+
+  .scroll-cue { animation: cue 2.2s cubic-bezier(.65,0,.35,1) infinite; }
+  @keyframes cue { 0% { transform: translateY(-100%); } 60%,100% { transform: translateY(200%); } }
+
+  .nav-link[aria-current="true"] { @apply text-copper; }
+  .menu-link { transform: translateY(0); }
+}
+
+/* Initial states exist only when JS is running and motion is allowed. */
+.js:not(.rm) [data-fade],
+.js:not(.rm) [data-hero-fade],
+.js:not(.rm) [data-hero-inset] { opacity: 0; }
+.js:not(.rm) .mask-in { opacity: 0; }
+.js:not(.rm) .reveal { clip-path: inset(0 0 100% 0); }
+.js:not(.rm) .dist-bar { transform: scaleX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
