@@ -105,6 +105,46 @@
     });
   }
 
+  // Enquiry form (static site: opens the visitor's email app, no server) ----
+  const form = $('#enquiry-form');
+  if (form) {
+    const status = $('#form-status');
+    const say = (msg, isError) => {
+      if (!status) return;
+      status.textContent = msg;
+      status.classList.remove('hidden');
+      status.classList.toggle('border-ink', !!isError);
+      status.classList.toggle('border-copper', !isError);
+    };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = (n) => (form.elements[n]?.value || '').trim();
+      if (v('website')) return; // honeypot
+      const name = v('name'), phone = v('phone'), email = v('email');
+      if (!name || !/^[0-9+()\-\s]{7,20}$/.test(phone)) {
+        say('Please enter your name and a valid phone number.', true);
+        (name ? form.elements.phone : form.elements.name).focus();
+        return;
+      }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        say('Please check your email address.', true);
+        form.elements.email.focus();
+        return;
+      }
+      const body = [
+        'New site-visit enquiry', '',
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Email: ${email || '-'}`,
+        `Looking for: ${v('interest') || '-'}`, '',
+        'Message:', v('message') || '-',
+      ].join('\n');
+      const to = (form.getAttribute('action') || '').replace(/^mailto:/, '');
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent('Site visit enquiry — ' + name)}&body=${encodeURIComponent(body)}`;
+      say('Your email app should now open with your enquiry ready to send. If it doesn’t, please call us instead.', false);
+    });
+  }
+
   // Header: solid background after hero, hide on scroll down -----------
   let lastY = window.scrollY;
   const onScroll = () => {
