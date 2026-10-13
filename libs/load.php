@@ -1,8 +1,6 @@
 <?php
 
-function load_templates($name)
+function load_templatess($name)
 {
-    include $_SERVER['DOCUMENT_ROOT'] . "/portfolio/_templates/$name.php";
+    include $_SERVER['DOCUMENT_ROOT'] . "/airport-city/_templates/$name.php";   
 }
-
-?>
